@@ -1,17 +1,19 @@
 # hogan-cached
-Express.js view engine that renders Mustache with Hogan.js and caches compiled templates for more speed
+[Express.js](http://expressjs.com/) view engine that renders [Mustache](http://mustache.github.io/) with [Hogan.js](http://twitter.github.io/hogan.js/) and caches compiled templates for more speed
+
+[![NPM](https://nodei.co/npm/hogan-cached.png)](https://nodei.co/npm/hogan-cached/)
 
 * Cache: Compiles once. Renders faster.
 * Partials support
 * Lambda support
-* All of Mustache 5 features
+* All of [mustache(5)](http://mustache.github.io/mustache.5.html) features
 
 ## Examples
 ```javascript
 var express = require('express');
 var app = express();
 
-app.engine('html', require('hogan-powered'));
+app.engine('html', require('hogan-cached'));
 app.set('view engine', 'html');
 
 app.get('/', function(req, res) {
@@ -78,7 +80,7 @@ I'm centered!
 #### Cache
 You can clear the cache anytime with `clearCache`
 ```javascript
-var engine = require('hogan-powered');
+var engine = require('hogan-cached');
 
 app.engine('html', engine);
 app.set('view engine', 'html');
@@ -94,4 +96,4 @@ app.set('hogan cache', false);
 ```
 
 #### More examples?
-Check out test/test.js
+Check out [test/test.js](https://github.com/Guichaguri/hogan-cached/blob/master/test/test.js)

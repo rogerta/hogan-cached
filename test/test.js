@@ -2,7 +2,11 @@ var express = require('express');
 
 var app = express();
 
+// If are trying to use this example, replace the line below to
+//var renderer = require('hogan-cached');
 var renderer = require('../index.js');
+
+
 app.engine('html', renderer);
 app.set('view engine', 'html');
 
