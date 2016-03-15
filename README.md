@@ -3,6 +3,7 @@
 
 [![NPM](https://nodei.co/npm/hogan-cached.png)](https://nodei.co/npm/hogan-cached/)
 
+* Designed for Express 4.x
 * Cache: Compiles once. Renders faster.
 * Partials support
 * Lambda support
