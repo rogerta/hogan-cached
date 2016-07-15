@@ -78,6 +78,14 @@ I'm centered!
 {{/logged_in}}
 ```
 
+#### Options
+Customizable Hogan.js options
+```javascript
+// Sets the delimiters to <% %> instead of {{ }}
+app.set('hogan options', {delimiters: '<% %>'});
+
+```
+
 #### Cache
 You can clear the cache anytime with `clearCache`
 ```javascript

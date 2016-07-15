@@ -4,46 +4,72 @@ var path = require('path');
 
 var cache = {};
 
-function getTemplate(filePath, cacheEnabled) {
+var options = {
+    basedir: null,
+    cache: true
+};
+
+function getTemplate(filePath, cacheEnabled, hoganOptions) {
     if(!cacheEnabled || cache[filePath] === undefined) {
         var content = '';
         try {
             content = fs.readFileSync(filePath, 'utf8');
         } catch(e) {}
 
-        if(!cacheEnabled) return hogan.compile(content);
+        if(!cacheEnabled) return hogan.compile(content, hoganOptions);
 
-        cache[filePath] = hogan.compile(content);
+        cache[filePath] = hogan.compile(content, hoganOptions);
     }
     return cache[filePath];
 }
 
-function getPartials(partialPaths, basedir, ext, partials, cacheEnabled) {
+function getPartials(partialPaths, basedir, ext, cacheEnabled, hoganOptions, partials) {
     if(!partials) partials = {};
+    if(ext.length > 0 && ext.substring(0, 1) != '.') ext = '.' + ext;
     for(var partialPath in partialPaths) {
-        var p = path.join(basedir, partialPaths[partialPath] + '.' + ext);
-        partials[partialPath] = getTemplate(p, cacheEnabled);
+        var p = path.join(basedir, partialPaths[partialPath] + ext);
+        partials[partialPath] = getTemplate(p, cacheEnabled, hoganOptions);
     }
     return partials;
 }
 
-module.exports = function(filePath, options, callback) {
-    var basedir = options.settings['views'] || path.dirname(filePath);
-    var ext = options.settings['view engine'] || 'html';
-
-    var partialPaths = options.settings['partials'] || {};
-    var partials = getPartials(partialPaths, basedir, ext);
-
-    var cacheEnabled = options.settings['hogan cache'] !== undefined ? options.settings['hogan cache'] : true;
-
-    if(options.partials !== undefined) {
-        partials = getPartials(options.partials, basedir, ext, partials, cacheEnabled);
-    }
-
-    var template = getTemplate(filePath, cacheEnabled);
-    callback(null, template.render(options, partials));
+module.exports.setBaseDir = function(dir) {
+    options.basedir = dir;
 };
+
+module.exports.setCacheEnabled = function(b) {
+    options.cache = b;
+};
+
+/*module.exports.setPartial = function(key, path) {
+
+};*/
 
 module.exports.clearCache = function() {
     cache = {};
+};
+
+/*module.exports.render = function(filePath, options) {
+
+
+    var template = getTemplate(filePath, cacheEnabled);
+    return template.render(options, partials);
+};*/
+
+module.exports = function(filePath, options, callback) {
+    var basedir = options.settings['views'] || options.basedir || path.dirname(filePath);
+    var ext = options.settings['view engine'] || 'html';
+
+    var cacheEnabled = options.settings['hogan cache'] !== undefined ? options.settings['hogan cache'] : options.cache;
+    var hoganOptions = options.settings['hogan options'] || {};
+
+    var partialPaths = options.settings['partials'] || {};
+    var partials = getPartials(partialPaths, basedir, ext, cacheEnabled, hoganOptions);
+
+    if(options.partials !== undefined) {
+        partials = getPartials(options.partials, basedir, ext, cacheEnabled, hoganOptions, partials);
+    }
+
+    var template = getTemplate(filePath, cacheEnabled, hoganOptions);
+    callback(null, template.render(options, partials));
 };
