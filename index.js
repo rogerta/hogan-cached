@@ -56,7 +56,7 @@ module.exports.clearCache = function() {
     return template.render(options, partials);
 };*/
 
-module.exports = function(filePath, options, callback) {
+module.exports.__express = function(filePath, options, callback) {
     var basedir = options.settings['views'] || options.basedir || path.dirname(filePath);
     var ext = options.settings['view engine'] || 'html';
 
