@@ -7,7 +7,7 @@ var app = express();
 var renderer = require('../index.js');
 
 
-app.engine('html', renderer);
+app.engine('html', renderer.__express);
 app.set('view engine', 'html');
 
 app.set('views', './test/views');
