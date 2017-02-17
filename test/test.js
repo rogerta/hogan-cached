@@ -20,6 +20,16 @@ app.set('partials', {
 
 
 app.get('/', function(req, res) {
+    res.send(
+        '<p><a href="basic">Basic</a><br/><iframe src="basic"></iframe></p>' +
+        '<p><a href="list">List</a><br/><iframe src="list"></iframe></p>' +
+        '<p><a href="lambda">Lambda</a><br/><iframe src="lambda"></iframe></p>' +
+        '<p><a href="partials">Partials</a><br/><iframe src="partials"></iframe></p>' +
+        '<p><a href="clearcache">ClearCache</a><br/><iframe src="clearcache"></iframe></p>'
+    );
+});
+
+app.get('/basic', function(req, res) {
     res.render('index', {
         title: 'Basic Test',
         description: 'Hello there!',
