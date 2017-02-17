@@ -1,6 +1,6 @@
-var hogan = require('hogan.js');
-var fs = require('fs');
-var path = require('path');
+const hogan = require('hogan.js');
+const fs = require('fs');
+const path = require('path');
 
 var cache = {};
 
@@ -9,18 +9,24 @@ var options = {
     cache: true
 };
 
-function getTemplate(filePath, cacheEnabled, hoganOptions) {
-    if(!cacheEnabled || cache[filePath] === undefined) {
-        var content = '';
-        try {
-            content = fs.readFileSync(filePath, 'utf8');
-        } catch(e) {}
-
-        if(!cacheEnabled) return hogan.compile(content, hoganOptions);
-
-        cache[filePath] = hogan.compile(content, hoganOptions);
+function loadTemplate(filePath, hoganOptions) {
+    try {
+        return hogan.compile(fs.readFileSync(filePath, 'utf8'), hoganOptions);
+    } catch(e) {
+        return undefined;
     }
-    return cache[filePath];
+}
+
+function getTemplate(filePath, cacheEnabled, hoganOptions) {
+    if (!cacheEnabled)
+        return loadTemplate(filePath, hoganOptions);
+
+    var templ = cache[filePath];
+    if (templ === undefined) {
+        templ = loadTemplate(filePath, hoganOptions);
+        cache[filePath] = templ;
+    }
+    return templ;
 }
 
 function getPartials(partialPaths, basedir, ext, cacheEnabled, hoganOptions, partials) {
@@ -41,20 +47,9 @@ module.exports.setCacheEnabled = function(b) {
     options.cache = b;
 };
 
-/*module.exports.setPartial = function(key, path) {
-
-};*/
-
 module.exports.clearCache = function() {
     cache = {};
 };
-
-/*module.exports.render = function(filePath, options) {
-
-
-    var template = getTemplate(filePath, cacheEnabled);
-    return template.render(options, partials);
-};*/
 
 module.exports.__express = function(filePath, options, callback) {
     var basedir = options.settings['views'] || options.basedir || path.dirname(filePath);
