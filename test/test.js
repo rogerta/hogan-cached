@@ -20,12 +20,12 @@ app.set('partials', {
 
 
 app.get('/', function(req, res) {
-    //res.send('<html><head></head></html>');
     res.send(
         '<p><a href="basic">Basic</a><br/><iframe src="basic"></iframe></p>' +
         '<p><a href="list">List</a><br/><iframe src="list"></iframe></p>' +
         '<p><a href="lambda">Lambda</a><br/><iframe src="lambda"></iframe></p>' +
         '<p><a href="partials">Partials</a><br/><iframe src="partials"></iframe></p>' +
+        '<p><a href="getpartialsfrom">Get Partials From</a><br/><iframe src="getpartialsfrom"></iframe></p>' +
         '<p><a href="clearcache">ClearCache</a><br/><iframe src="clearcache"></iframe></p>'
     );
 });
@@ -79,6 +79,16 @@ app.get('/clearcache', function(req, res) {
         'description': 'The cache was cleared',
         'year': 2016
     });
+});
+
+app.get('/getpartialsfrom', function(req, res) {
+    var partials = renderer.getPartialsFrom(app.get('views'),
+                                            app.get('view engine'));
+    var a = [];
+    for (name in partials) {
+      a.push(`${name}: ${partials[name]}`);
+    }
+    res.send(a.join(', '));
 });
 
 app.listen(8081);
