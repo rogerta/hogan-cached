@@ -5,7 +5,6 @@ var path = require('path');
 var cache = {};
 
 var options = {
-    basedir: null,
     cache: true
 };
 
@@ -33,31 +32,16 @@ function getPartials(partialPaths, basedir, ext, cacheEnabled, hoganOptions, par
     return partials;
 }
 
-module.exports.setBaseDir = function(dir) {
-    options.basedir = dir;
-};
-
 module.exports.setCacheEnabled = function(b) {
     options.cache = b;
 };
-
-/*module.exports.setPartial = function(key, path) {
-
-};*/
 
 module.exports.clearCache = function() {
     cache = {};
 };
 
-/*module.exports.render = function(filePath, options) {
-
-
-    var template = getTemplate(filePath, cacheEnabled);
-    return template.render(options, partials);
-};*/
-
 module.exports.__express = function(filePath, options, callback) {
-    var basedir = options.settings['views'] || options.basedir || path.dirname(filePath);
+    var basedir = options.settings['views'];
     var ext = options.settings['view engine'] || 'html';
 
     var cacheEnabled = options.settings['hogan cache'] !== undefined ? options.settings['hogan cache'] : options.cache;
