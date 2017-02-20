@@ -20,17 +20,20 @@ app.set('partials', {
 
 
 app.get('/', function(req, res) {
-    res.send(
-        '<p><a href="basic">Basic</a><br/><iframe src="basic"></iframe></p>' +
-        '<p><a href="list">List</a><br/><iframe src="list"></iframe></p>' +
-        '<p><a href="lambda">Lambda</a><br/><iframe src="lambda"></iframe></p>' +
-        '<p><a href="partials">Partials</a><br/><iframe src="partials"></iframe></p>' +
-        '<p><a href="clearcache">ClearCache</a><br/><iframe src="clearcache"></iframe></p>'
-    );
+    res.render('index', {
+        title: 'All Test',
+        tests: [
+            {name: 'Basic', url: 'basic'},
+            {name: 'List', url: 'list'},
+            {name: 'Lambda', url: 'lambda'},
+            {name: 'Partials', url: 'partials'},
+            {name: 'ClearCache', url: 'clearcache'}
+        ]
+    });
 });
 
 app.get('/basic', function(req, res) {
-    res.render('index', {
+    res.render('basic', {
         title: 'Basic Test',
         description: 'Hello there!',
         year: 2016
@@ -73,7 +76,7 @@ app.get('/partials', function(req, res) {
 
 app.get('/clearcache', function(req, res) {
     renderer.clearCache();
-    res.render('index', {
+    res.render('basic', {
         'title': 'Cache',
         'description': 'The cache was cleared',
         'year': 2016

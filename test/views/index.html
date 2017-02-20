@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>{{title}}</title>
+    <style>div {display: inline-block; padding: 1em;}</style>
 </head>
 <body>
     <h1>{{title}}</h1>
-    {{description}}
-    {{> footer}}
+    {{#tests}}
+    <div><a href="{{url}}">{{name}}</a><br/><iframe src="{{url}}"></iframe></div>
+    {{/tests}}
 </body>
 </html>
